@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block 'titulo' %}Inicio{% endblock %}
+
+
+{% block 'contenido' %}
+
+<div class="form-card">
+
+	<canvas id="chart" height="600"></canvas>
+
+	<script>
+	const ctx = document.getElementById('chart');
+
+	new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+            label: 'Saldo US$MM',
+            data: {{ values|safe }}
+        }]
+    },
+    options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'right',
+                formatter: value => {
+                    return value.toLocaleString('en-US');
+                },
+                font: {
+                    weight: 'bold'
+                }
+            }
+        },
+        scales: {
+            x: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+	</script>
+</div>
+
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block 'titulo' %}Inicio{% endblock %}
+
+
+{% block 'contenido' %}
+
+<div class="form-card">
+
+	<canvas id="chart" height="300"></canvas>
+
+	<script>
+	const ctx = document.getElementById('chart');
+
+	new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+		    type: 'bar',
+		    label: 'Variación %',
+		    data: {{ values|safe }},
+		    backgroundColor: (ctx) => {
+		        const value = ctx.raw;
+		        if (value === null) return 'rgba(0,0,0,0)';
+		        return value >= 0
+		            ? 'rgba(34, 197, 94, 0.8)'   // verde
+		            : 'rgba(239, 68, 68, 0.8)';  // rojo
+		    },
+		    borderColor: (ctx) => {
+		        const value = ctx.raw;
+		        if (value === null) return 'rgba(0,0,0,0)';
+		        return value >= 0
+		            ? 'rgb(22, 163, 74)'
+		            : 'rgb(185, 28, 28)';
+		    },
+		    borderWidth: 1
+		}]
+    },
+    options: {
+        indexAxis: 'x',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            datalabels: {
+                anchor: 'end',
+                align: 'center',
+                formatter: value => {
+                    return value.toLocaleString('en-US');
+                },
+                font: {
+                    weight: 'bold'
+                }
+            }
+        },
+        scales: {
+            x: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+	</script>
+</div>
+<br>
+
+<div class="form-card">
+
+	<canvas id="chart2" height="300"></canvas>
+
+	<script>
+	const ctx2 = document.getElementById('chart2');
+
+	new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+		    type: 'bar',
+		    label: null,
+		    data: {{ values_acc|safe }},
+		    backgroundColor: (ctx) => {
+		        const value = ctx.raw;
+		        if (value === null) return 'rgba(0,0,0,0)';
+		        return value >= 0
+		            ? 'rgba(34, 197, 94, 0.8)'   // verde
+		            : 'rgba(239, 68, 68, 0.8)';  // rojo
+		    },
+		    borderColor: (ctx) => {
+		        const value = ctx.raw;
+		        if (value === null) return 'rgba(0,0,0,0)';
+		        return value >= 0
+		            ? 'rgb(22, 163, 74)'
+		            : 'rgb(185, 28, 28)';
+		    },
+		    borderWidth: 1
+		}]
+    },
+    options: {
+        indexAxis: 'x',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+        	legend: {
+            	display: false
+        	},
+    
+            datalabels: {
+                anchor: 'end',
+                align: 'center',
+                formatter: value => {
+                    return value.toLocaleString('en-US');
+                },
+                font: {
+                    weight: 'bold'
+                }
+            }
+        },
+        scales: {
+            x: {
+                beginAtZero: true
+            }
+        }
+    },
+    plugins: [ChartDataLabels]
+});
+	</script>
+</div>
+
+
+{% endblock %}
